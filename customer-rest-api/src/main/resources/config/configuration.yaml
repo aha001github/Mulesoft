@@ -1,0 +1,6 @@
+oracle:
+  host: "localhost"
+  port: "1521"
+  instance: "orcl"
+  user: "mvc_bank" 
+  password: "password"

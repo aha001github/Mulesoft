@@ -1,0 +1,119 @@
+#%RAML 1.0
+---
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/28e0497a-6af3-4f07-9475-ab664a887298/ # 
+title: Customer REST Service API
+version: v1
+protocols: [HTTPS]
+mediaType: application/json
+
+securitySchemes:
+    basic:
+      description: This API supports Basic Authentication.
+      type: Basic Authentication
+
+types:
+  Customer:
+    properties:
+      id?: integer
+      firstName: string
+      lastName: string
+      addressLine1: string
+      addressLine2: string
+      suburb: string
+      city: string
+      country: string
+  Error:
+    properties:
+      code: integer
+      message: string
+  Generic:
+    properties:
+      message: string
+
+/customer:
+  get:
+    description: List all customers
+    responses:
+      200:
+        description: SUCCESS
+        body:
+          application/json:
+            type: Customer[]
+            example: !include customer-include-multi.sample
+      404:
+        description: FAILED
+        body:
+          application/json:
+            type: Error
+            example: {"code" : 404, "message" : "Customer not found"}  
+  post:
+    description: Create a new customer
+    body:
+      application/json:
+        type: Customer
+        example: !include customer-include-single.sample
+    responses:
+      201:
+        description: SUCCESS
+        body:
+          application/json:
+            type: Customer
+            example: !include customer-include-single.sample
+      404:
+        description: FAILED
+        body:
+          application/json:
+            type: Error
+            example: {"code" : 404, "message" : "Cannot add customer"}
+              
+  /{id}:
+    get:
+      description: List all customers
+      responses:
+        200:
+          description: SUCCESS
+          body:
+            application/json:
+              type: Customer
+              example: !include customer-include-single.sample
+        404:
+          description: FAILED
+          body:
+            application/json:
+              type: Error
+              example: {"code" : 404, "message" : "Customer not found"}
+    put:  
+      description: Update customer
+      body:
+        application/json:
+          type: Customer
+          example: !include customer-include-single.sample
+      responses:
+        200:
+          description: SUCCESS
+          body:
+            application/json:
+              type: Generic
+              example: !include customer-include-message.sample
+        404:
+          description: FAILED
+          body:
+            application/json:
+              type: Error
+              example: {"code" : 404, "message" : "Cannot update customer"}
+    delete:
+      description: Delete customer
+      responses:
+        200:
+          description: SUCCESS
+          body:
+            application/json:
+              type: Generic
+              example: !include customer-include-message.sample
+        404:
+          description: FAILED
+          body:
+            application/json:
+              type: Error
+              example: {"code" : 404, "message" : "Cannot delete customer"}
+
